@@ -191,58 +191,6 @@ const main = async () => {
     const tokens = await readFile("tokens.txt")
     const reffCodes = await readFile("reffCodes.txt")
     let taskIndex = 1;
-    if (false) {
-        for (let i = 0; i < 5; i++) {
-            for (const token of tokens) {
-                const response = await getUserRef(token);
-                if (!response?.data?.is_referral_active) continue;
-                const reffCode = response?.data?.referral_code;
-                log.info(`Found new active referral code:`, reffCode);
-                if (reffCode) {
-                    try {
-                        let account = await mailjs.createOneAccount();
-                        while (!account?.data?.username) {
-                            log.warn('Failed To Generate New Email, Retrying...');
-                            await delay(3)
-                            account = await mailjs.createOneAccount();
-                        }
-
-                        const email = account.data.username;
-                        const password = account.data.password;
-
-                        log.info(`Trying to register email: ${email}`);
-                        let regResponse = await registerUser(email, password, null);
-                        while (!regResponse?.data?.token) {
-                            log.warn('Failed To Register, Retrying...');
-                            await delay(3)
-                            regResponse = await registerUser(email, password, null);
-                        }
-                        const token = regResponse.data.token;
-
-                        log.info(`Trying to create profile for ${email}`);
-                        await createUserProfile(token, { step: 'username', username: email });
-                        await createUserProfile(token, { step: 'description', description: "AI Startup" });
-
-
-                        let confirm = await confirmUserReff(token, reffCode);
-                        while (!confirm?.data?.token) {
-                            log.warn('Failed To Confirm Referral, Retrying...');
-                            await delay(3)
-                            confirm = await confirmUserReff(token, reffCode);
-                        }
-
-                        await saveToFile("accounts.txt", `${email}|${password}`)
-                        await saveToFile("tokens.txt", `${confirm.data.token}`)
-
-                    } catch (err) {
-                        log.error('Error creating account:', err.message);
-                    }
-                }
-            };
-        }
-    }
-
-
     try {
         let account = await mailjs.createOneAccount();
         while (!account?.data?.username) {
