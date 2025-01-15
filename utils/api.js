@@ -78,7 +78,10 @@ export const confirmUserReff = async (token, referral_code) => {
                 'Authorization': `Bearer ${token}`
             }
         });
-        log.info('Confirm User referral successfully:', response.data.message);
+        if (response.data) {
+            log.info('Referral response data:', response.data);
+        }
+        //log.info('Confirm User referral successfully:', response.data.message);
         return response.data;
     } catch (error) {
         log.error('Error Confirm User referral:', error.response ? error.response.data : error.message);
