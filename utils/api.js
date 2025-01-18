@@ -158,4 +158,24 @@ export async function connect(token, proxy) {
         log.error(`Error when update connection: ${error.message}`);
         return null;
     }
+} 
+
+export async function claimPoints(token, proxy) {
+    const agent = newAgent(proxy);
+    try {
+        const payload = {}
+        const response = await axios.post('https://api.depined.org/api/referrals/claim_points', payload, {
+            headers: {
+                ...headers,
+                'Authorization': 'Bearer ' + token
+            },
+            httpsAgent: agent,
+            httpAgent: agent
+        });
+
+        return response.data;
+    } catch (error) {
+        log.error(`Error when claiming points: ${error.message}`);
+        return null;
+    }
 }
