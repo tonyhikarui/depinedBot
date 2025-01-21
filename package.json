@@ -16,8 +16,10 @@
     "axios": "^1.7.9",
     "chalk": "^5.4.1",
     "https-proxy-agent": "^7.0.6",
+    "input": "^1.0.1",
     "node-telegram-bot-api": "^0.66.0",
     "random-useragent": "^0.5.0",
-    "socks-proxy-agent": "^8.0.5"
+    "socks-proxy-agent": "^8.0.5",
+    "telegram": "^2.26.16"
   }
 }
