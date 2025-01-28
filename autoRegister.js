@@ -21,8 +21,8 @@ const main = async () => {
             const response = await getUserRef(token);
             if (!response?.data?.is_referral_active) continue;
             const reffCode = response?.data?.referral_code;
-            log.info(`Found new active referral code:`, reffCode);
             if (reffCode) {
+                log.info(`Found new active referral code:`, reffCode);
                 try {
                     let account = await mailjs.createOneAccount();
                     while (!account?.data?.username) {
@@ -61,6 +61,8 @@ const main = async () => {
                 } catch (err) {
                     log.error('Error creating account:', err.message);
                 }
+            } else {
+                log.warn('No referral code found for this account');
             }
         };
     }
@@ -68,7 +70,7 @@ const main = async () => {
 
 // Handle CTRL+C (SIGINT)
 process.on('SIGINT', () => {
-    log.info('SIGINT received. Exiting...');
+    log.warn('SIGINT received. Exiting...');
     process.exit();
 });
 
